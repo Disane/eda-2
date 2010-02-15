@@ -1,7 +1,7 @@
 # SPU Instruction Set Descriptor File
-#   by geohot
+# by geohot
 # part of "The Embedded Disassembler"
-
+ 
 # Registers is a reserved keyword
 # Makes Registers_0 Registers_1 Registers_2... in global scope
 # Haha, that would've been nice if true
@@ -20,13 +20,13 @@ Registers 128 %100 %101 %102 %103 %104 %105 %106 %107 %108 %109
 Registers 128 %110 %111 %112 %113 %114 %115 %116 %117 %118 %119
 Registers 128 %120 %121 %122 %123 %124 %125 %126 %127
 Registers 32 PC
-
+ 
 # Special Strings
 ProgramCounter `PC`
 LinkRegister `%R0`
 StackPointer `%R1`
 ProgramCounterOffset 0
-
+ 
 # Instruction Comprehesions start here
 # An instruction runs through all matching until it hits Stop
 # * is don't care
@@ -36,236 +36,283 @@ ProgramCounterOffset 0
 # Stop, Change, Parsed are special local words
 # Everything else is a string, with all whitespace stripped
 # Curly braces mean insert variable, undeclared vars are empty
-
+ 
 # Parsed
-#   Parsed can be recursive, use percent to insert
-#   |...| is eval string to hex
-
+# Parsed can be recursive, use percent to insert
+# |...| is eval string to hex
+ 
 # Noob notes
-#   |...| is eval string to hex
-#   {...} is get variable
-#   {{...}} is get register indexed by variable
-#   [...] is dereference
-#   `...` is "address of"
-
+# |...| is eval string to hex
+# {...} is get variable
+# {{...}} is get register indexed by variable
+# [...] is dereference
+# `...` is "address of"
+ 
 # So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the variable "n". Got that?
 # Though I don't understand {|{ri}|} for immeds, why the second get variable
-
+ 
 # DefaultChanges apply to the inverse condition of anything targeting the target
 # If that makes sense at all
-
+ 
 # I don't think signed(as in like + and -) is handled yet
-
+ 
 # This will not be a simulator for now
 
+# Update by Disane some of the Integer and Logical Instructions were wrong so i had to correct them
+# missing t -s and the Add Word bit mask was wrong
+# also added new instructions
+# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store Instructions are valid
+
 ####DefaultChanges####
-
+ 
 DefaultChange 32 `PC` [`PC`]+4
-
+ 
 ####Memory-Load/Store Instructions####
-
+ 
 # Load Quadword (d-form)
 00110100 iiiiiiiiii aaaaaaa ttttttt
   ri {i} << 4
   Parsed "O R, I(R)" lqd {{t}} {|{ri}|} {{a}}
   #Change 128 `{{t}}` [[`{{a}}`] + {ri}]
   Stop
-
+ 
 # Load Quadword (x-form)
 00111000100 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" lqx {{t}} {{a}} {{b}}
   #Change 128 `{{t}}` [[`{{a}}`] + [`{{b}}`]]
   Stop
-
+ 
 # Load Quadword (a-form)
 001100001 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" lqa {{t}} {|{i}|}
   #Change 128 `{{t}}` {i}
   Stop
-
+ 
 # Load Quadword Instruction Relative (a-form)
 001100111 iiiiiiiiiiiiiiii ttttttt
   Source [[`PC`] + ({i} << 2)]
   Parsed "O R, I" lqr {{t}} {|Source|}
   #Change 128 `{{t}}` {Source}
   Stop
-
+ 
 # Store Quadword (d-form)
 00100100 iiiiiiiiii aaaaaaa ttttttt
   ri {i} << 4
   Parsed "O R, I(R)" stqd {{t}} {|{ri}|} {{a}}
   #Change 128 [`{{a}}`]+{ri} [`{{t}}`]
   Stop
-
+ 
 # Store Quadword (x-form)
 00101000100 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" stqx {{t}} {{a}} {{b}}
   #Change 128 [`{{a}}`] + [`{{b}}`] [`{{t}}`]
   Stop
-
+ 
 # Store Quadword (a-form)
 001000001 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" stqa {{t}} {|{i}|}
   #Change 128 {i} [`{{t}}`]
   Stop
-
+ 
 # Store Quadword Instruction Relative (a-form)
 001000111 iiiiiiiiiiiiiiii ttttttt
   Source [[`PC`] + ({i} << 2)]
   Parsed "O R, I" stqr {{t}} {|Source|}
   #Change 128 {Source} [`{{t}}`]
   Stop
-
+ 
 # Generate Controls for Byte Insertion (d-form)
 00111110100 iiiiiii aaaaaaa ttttttt
   Parsed "O R, I(R)" cbd {{t}} {i} {{a}}
   Stop
-
+ 
 # Generate Controls for Byte Insertion (x-form)
 00111010100 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" cbx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Generate Controls for Halfword Insertion (d-form)
 00111110101 iiiiiii aaaaaaa ttttttt
   Parsed "O R, I(R)" chd {{t}} {i} {{a}}
   Stop
-
+ 
 # Generate Controls for Halfword Insertion (x-form)
 00111010101 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" chx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Generate Controls for Word Insertion (d-form)
 00111110110 iiiiiii aaaaaaa ttttttt
   Parsed "O R, I(R)" cwd {{t}} {i} {{a}}
   Stop
-
+ 
 # Generate Controls for Word Insertion (x-form)
 00111010110 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" cwx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Generate Controls for Doubleword Insertion (d-form)
 00111110111 iiiiiii aaaaaaa ttttttt
   Parsed "O R, I(R)" cdd {{t}} {i} {{a}}
   Stop
-
+ 
 # Generate Controls for Doubleword Insertion (x-form)
 00111010111 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" cdx {{t}} {{a}} {{b}}
   Stop
-
+ 
 ####Constant-Formation Instructions####
-
+ 
 # Immediate Load Halfword
 010000011 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" ilh {{t}} {i}
   Stop
-
+ 
 # Immediate Load Halfword Upper
 010000010 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" ilhu {{t}} {i}
   Stop
-
+ 
 # Immediate Load Word
 010000001 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" il {{t}} {i}
   Stop
-
+ 
 # Immediate Load Address
 0100001 iiiiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" ila {{t}} {i}
   Stop
-
+ 
 # Immediate Or Halfword Lower
 011000001 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" iohl {{t}} {i}
   Stop
-
+ 
 # Form Select Mask for Bytes Immediate
 001100101 iiiiiiiiiiiiiiii ttttttt
   Parsed "O R, I" fsmbi {{t}} {i}
   Stop
-
+ 
 ####Integer and Logical Instructions####
-
+ 
 # Add Halfword
-00011001000 bbbbbbb aaaaaaa tttttt
+00011001000 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" ah {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Add Halfword Immediate
-00011101 iiiiiiiiii aaaaaaa tttttt
+00011101 iiiiiiiiii aaaaaaa ttttttt
   Parsed "O R, R, I" ahi {{t}} {{a}} {i}
   Stop
-
+ 
 # Add Word
-00011001000 bbbbbbb aaaaaaa tttttt
+00011000000 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" a {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Add Word Immediate
-00011100 iiiiiiiiii aaaaaaa tttttt
+00011100 iiiiiiiiii aaaaaaa ttttttt
   Parsed "O R, R, I" ai {{t}} {{a}} {i}
   Stop
-
+ 
 # Subtract from Halfword
-00001001000 bbbbbbb aaaaaaa tttttt
+00001001000 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" sfh {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Subtract from Halfword Immediate
-00001101 iiiiiiiiii aaaaaaa tttttt
+00001101 iiiiiiiiii aaaaaaa ttttttt
   Parsed "O R, R, I" sfhi {{t}} {{a}} {i}
   Stop
-
+ 
 # Subtract from Word
-00001000000 bbbbbbb aaaaaaa tttttt
+00001000000 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" sf {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Subtract from Word Immediate
-00001100 iiiiiiiiii aaaaaaa tttttt
+00001100 iiiiiiiiii aaaaaaa ttttttt
   Parsed "O R, R, I" sfi {{t}} {{a}} {i}
   Stop
-
+ 
 # Add Extended
-01101000000 bbbbbbb aaaaaaa tttttt
+01101000000 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" addx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Carry Generate
-00011000010 bbbbbbb aaaaaaa tttttt
+00011000010 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" cg {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Carry Generate Extended
-01101000010 bbbbbbb aaaaaaa tttttt
+01101000010 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" cgx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Subtract from Extended
-01101000001 bbbbbbb aaaaaaa tttttt
+01101000001 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" sfx {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Borrow Generate
-00001000010 bbbbbbb aaaaaaa tttttt
+00001000010 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" bg {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Multiply
-01111000100 bbbbbbb aaaaaaa tttttt
+01111000100 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" mpy {{t}} {{a}} {{b}}
   Stop
-
+ 
 # Multiply Unsigned
-01111001100 bbbbbbb aaaaaaa tttttt
+01111001100 bbbbbbb aaaaaaa ttttttt
   Parsed "O R, R, R" mpyu {{t}} {{a}} {{b}}
   Stop
-
-# Multiply Unsigned
-01110100 iiiiiiiiii aaaaaaa tttttt
+ 
+# Multiply Immediate
+01110100 iiiiiiiiii aaaaaaa ttttttt
   Parsed "O R, R, I" mpyi {{t}} {{a}} {i}
   Stop
+
+# Multiply Unsigned Immediate
+01110101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" mpyui {{t}} {{a}} {i}
+  Stop
+
+# Multiply and Add
+1100 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" mpya {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+# Multiply High
+01111000101 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpyh {{t}} {{a}} {{b}}
+  Stop
+
+# Multiply and Shift Right
+01111000111 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpys {{t}} {{a}} {{b}}
+  Stop
+
+# Multiply High High
+01111000110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpyhh {{t}} {{a}} {{b}}
+  Stop
+
+# Multiply High High and Add
+01101000110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpyhha {{t}} {{a}} {{b}}
+  Stop
+
+# Multiply High High Unsigned
+01111001110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpyhhu {{t}} {{a}} {{b}}
+  Stop
+
+# Multiply High High Unsigned and Add
+01101001110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" mpyhhau {{t}} {{a}} {{b}}
+  Stop
+
+# Count Leading Zeros
