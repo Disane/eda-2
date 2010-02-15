@@ -48,7 +48,9 @@ ProgramCounterOffset 0
 # [...] is dereference
 # `...` is "address of"
  
-# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the variable "n". Got that?
+# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the variable "n". Got 
+
+that?
 # Though I don't understand {|{ri}|} for immeds, why the second get variable
  
 # DefaultChanges apply to the inverse condition of anything targeting the target
@@ -60,8 +62,10 @@ ProgramCounterOffset 0
 
 # Update by Disane some of the Integer and Logical Instructions were wrong so i had to correct them
 # missing t -s and the Add Word bit mask was wrong
-# also added new instructions
-# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store Instructions are valid
+# also added all Integer and Logical Instructions
+# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store Instructions are 
+
+valid
 
 ####DefaultChanges####
  
@@ -316,3 +320,173 @@ DefaultChange 32 `PC` [`PC`]+4
   Stop
 
 # Count Leading Zeros
+01010100101 ******* aaaaaaa ttttttt
+  Parsed "O R, R" clz {{t}} {{a}}
+  Stop
+
+# Count Ones in Bytes
+01010110100 ******* aaaaaaa ttttttt
+  Parsed "O R, R" cntb {{t}} {{a}}
+  Stop
+
+# Form Select Mask for Bytes
+00110110110 ******* aaaaaaa ttttttt
+  Parsed "O R, R" fsmb {{t}} {{a}}
+  Stop
+
+# Form Select Mask for Halfwords
+00110110101 ******* aaaaaaa ttttttt
+  Parsed "O R, R" fsmh {{t}} {{a}}
+  Stop
+
+# Form Select Mask for Words
+00110110100 ******* aaaaaaa ttttttt
+  Parsed "O R, R" fsm {{t}} {{a}}
+  Stop
+
+# Gather Bits from Bytes
+00110110010 ******* aaaaaaa ttttttt
+  Parsed "O R, R" gbb {{t}} {{a}}
+  Stop
+
+# Gather Bits from Halfwords
+00110110001 ******* aaaaaaa ttttttt
+  Parsed "O R, R" gbh {{t}} {{a}}
+  Stop
+
+# Gather Bits from Words
+00110110000 ******* aaaaaaa ttttttt
+  Parsed "O R, R" gb {{t}} {{a}}
+  Stop
+
+# Average Bytes
+00011010011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" avgb {{t}} {{a}} {{b}}
+  Stop
+
+# Absolute Differences of Bytes
+00001010011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" absdb {{t}} {{a}} {{b}}
+  Stop
+
+# Sum Bytes into Halfwords
+01001010011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" sumb {{t}} {{a}} {{b}}
+  Stop
+
+# Extend Sign Byte to Halfword
+01010110110 ******* aaaaaaa ttttttt
+  Parsed "O R, R" xsbh {{t}} {{a}}
+  Stop
+
+# Extend Sign Halfword to Word
+01010101110 ******* aaaaaaa ttttttt
+  Parsed "O R, R" xshw {{t}} {{a}}
+  Stop
+
+# Extend Sign Word to Doubleword
+01010100110 ******* aaaaaaa ttttttt
+  Parsed "O R, R" xswd {{t}} {{a}}
+  Stop
+
+# And
+00011000001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" and {{t}} {{a}} {{b}}
+  Stop
+
+# And with Complement
+01011000001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" andc {{t}} {{a}} {{b}}
+  Stop
+
+# And Byte Immediate
+00010110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" andbi {{t}} {{a}} {i}
+  Stop
+
+# And Halfword Immediate
+00010101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" andhi {{t}} {{a}} {i}
+  Stop
+
+# And Word Immediate
+00010100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" andi {{t}} {{a}} {i}
+  Stop
+
+# Or
+00001000001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" or {{t}} {{a}} {{b}}
+  Stop
+
+# Or with Complement
+01011001001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" orc {{t}} {{a}} {{b}}
+  Stop
+
+# Or Byte Immediate
+00000110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" orbi {{t}} {{a}} {i}
+  Stop
+
+# Or Halfword Immediate
+00000101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" orhi {{t}} {{a}} {i}
+  Stop
+
+# Or Word Immediate
+00000100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" ori {{t}} {{a}} {i}
+  Stop
+
+# Or Across
+00111110000 ******* aaaaaaa ttttttt
+  Parsed "O R, R" orx {{t}} {{a}}
+  Stop
+
+# Exclusive Or
+01001000001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" xor {{t}} {{a}} {{b}}
+  Stop
+
+# Exclusive Or Byte Immediate
+01000110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" xorbi {{t}} {{a}} {i}
+  Stop
+
+# Exclusive Or Halfword Immediate
+01000101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" xorhi {{t}} {{a}} {i}
+  Stop
+
+# Exclusive Or Word Immediate
+01000100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" xori {{t}} {{a}} {i}
+  Stop
+
+# Nand
+00011001001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" nand {{t}} {{a}} {{b}}
+  Stop
+
+# Nor
+00001001001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" nor {{t}} {{a}} {{b}}
+  Stop
+
+# Equivalent
+01001001001 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" eqv {{t}} {{a}} {{b}}
+  Stop
+
+# Select Bits
+1000 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" selb {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+# Shuffle Bytes
+1011 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" shufb {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+####Shift and Rotate Instructions####
