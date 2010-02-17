@@ -48,9 +48,9 @@ ProgramCounterOffset 0
 # [...] is dereference
 # `...` is "address of"
  
-# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the variable "n". Got 
+# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the 
 
-that?
+variable "n". Got that?
 # Though I don't understand {|{ri}|} for immeds, why the second get variable
  
 # DefaultChanges apply to the inverse condition of anything targeting the target
@@ -60,12 +60,14 @@ that?
  
 # This will not be a simulator for now
 
-# Update by Disane some of the Integer and Logical Instructions were wrong so i had to correct them
+# Update by Disane some of the Integer and Logical Instructions were wrong so i had 
+
+to correct them
 # missing t -s and the Add Word bit mask was wrong
 # also added all Integer and Logical Instructions
-# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store Instructions are 
+# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store 
 
-valid
+Instructions are valid
 
 ####DefaultChanges####
  
@@ -490,3 +492,160 @@ DefaultChange 32 `PC` [`PC`]+4
   Stop
 
 ####Shift and Rotate Instructions####
+
+# Shift Left Halfword
+00001011111 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” shlh {{t}} {{a}} {{b}}
+  Stop
+
+# Shift Left Halfword Immediate
+00001111111 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" shlhi {{t}} {{a}} {i}
+  Stop
+
+# Shift Left Word
+00001011011 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” shl {{t}} {{a}} {{b}}
+  Stop
+
+# Shift Left Word Immediate
+00001111011 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" shlhi {{t}} {{a}} {i}
+  Stop
+
+# Shift Left Quadword by Bits
+00111011011 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” shlqbi {{t}} {{a}} {{b}}
+  Stop
+
+# Shift Left Quadword by Bits Immediate
+00111111011 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" shlqbii {{t}} {{a}} {i}
+  Stop
+
+# Shift Left Quadword by Bytes
+00111011111 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” shlqby {{t}} {{a}} {{b}}
+  Stop
+
+# Shift Left Quadword by Bytes Immediate
+00111111111 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" shlqbyi {{t}} {{a}} {i}
+  Stop
+
+# Shift Left Quadword by Bytes from Bit Shift Count
+00111001111 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” shlqbybi {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Halfword
+00001011100 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” roth {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Halfword Immediate
+00001111100 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rothi {{t}} {{a}} {i}
+  Stop
+
+# Rotate Word
+00001011000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rot {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Word Immediate
+00001111000 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" roti {{t}} {{a}} {i}
+  Stop
+
+# Rotate Quadword by Bytes
+00111011100 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqby {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Quadword by Bytes Immediate
+00111111100 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotqbyi {{t}} {{a}} {i}
+  Stop
+
+# Rotate Quadword by Bytes from Bit Shift Count
+00111001100 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqbybi {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Quadword by Bits
+00111011000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqbi {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate Quadword by Bits Immediate
+00111111000 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotqbii {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Halfword
+00001011101 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rothm {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Halfword Immediate
+00001111101 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rothmi {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Word
+00001011001 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotm {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Word Immediate
+00001111001 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotmi {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Quadword by Bytes
+00111011101 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqmby {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Quadword by Bytes Immediate
+00111111101 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotqmbyi {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Quadword Bytes from Bit Shift Count
+00111001101 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqmbybi {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Quadword by Bits
+00111011001 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotqmbi {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Quadword by Bits Immediate
+00111111001 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotqmbii {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Algebraic Halfword
+00001011110 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotmah {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Algebraic Halfword Immediate
+00001111110 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotmahi {{t}} {{a}} {i}
+  Stop
+
+# Rotate and Mask Algebraic Word
+00001011010 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” rotma {{t}} {{a}} {{b}}
+  Stop
+
+# Rotate and Mask Algebraic Word Immediate
+00001111010 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" rotmai {{t}} {{a}} {i}
+  Stop
+
+####Compare Branch and Halt Instructions####
