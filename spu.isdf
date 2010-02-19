@@ -68,6 +68,9 @@ to correct them
 # i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store 
 
 Instructions are valid
+# Compare Branch and Halt Instructions in the IBM documentation are a little bit 
+
+weird so i decided to update my ISDF documentation
 
 ####DefaultChanges####
  
@@ -649,3 +652,205 @@ DefaultChange 32 `PC` [`PC`]+4
   Stop
 
 ####Compare Branch and Halt Instructions####
+
+# Halt If Equal
+01111011000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R” heq {{a}} {{b}}
+  Stop
+
+# Halt If Equal Immediate
+01111111 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, I" heqi {{a}} {i}
+  Stop
+
+# Halt If Greater Than
+01001011000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R” hgt {{a}} {{b}}
+  Stop
+
+# Halt If Greater Than Immediate
+01001111 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, I" hgti {{a}} {i}
+  Stop
+
+# Halt If Logically Greater Than
+01011011000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R” hlgt {{a}} {{b}}
+  Stop
+
+# Halt If Logically Greater Than Immediate
+01011111 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, I" hlgti {{a}} {i}
+  Stop
+
+# Compare Equal Byte
+01111010000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” ceqb {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Equal Byte Immediate
+01111110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" ceqbi {{t}} {{a}} {i}
+  Stop
+
+# Compare Equal Halfword
+01111001000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” ceqh {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Equal Halfword Immediate
+01111101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" ceqhi {{t}} {{a}} {i}
+  Stop
+
+# Compare Equal Word
+01111000000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” ceq {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Equal Word Immediate
+01111100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" ceqi {{t}} {{a}} {i}
+  Stop
+
+# Compare Greater Than Byte
+01001010000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” cgtb {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Greater Than Byte Immediate
+01001110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cgtbi {{t}} {{a}} {i}
+  Stop
+
+# Compare Greater Than Halfword
+01001001000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” cgth {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Greater Than Halfword Immediate
+01001101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cgthi {{t}} {{a}} {i}
+  Stop
+
+# Compare Greater Than Word
+01001000000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” cgt {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Greater Than Word Immediate
+01001100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cgti {{t}} {{a}} {i}
+  Stop
+
+# Compare Logical Greater Than Byte
+01011010000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” clgtb {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Logical Greater Than Byte Immediate
+01011110 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" clgtbi {{t}} {{a}} {i}
+  Stop
+
+# Compare Logical Greater Than Halfword
+01011001000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” clgth {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Logical Greater Than Halfword Immediate
+01011101 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" clgt {{t}} {{a}} {i}
+  Stop
+
+# Compare Logical Greater Than Word
+01011000000 bbbbbbb aaaaaaa ttttttt 
+  Parsed “O R, R, R” clgth {{t}} {{a}} {{b}}
+  Stop
+
+# Compare Logical Greater Than Word Immediate
+01011100 iiiiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" clgti {{t}} {{a}} {i}
+  Stop
+
+# Branch Relative
+001100100 iiiiiiiiiiiiiiii *******
+  Parsed "O I" br {i}
+  Stop
+
+# Branch Absolute
+001100000 iiiiiiiiiiiiiiii *******
+  Parsed "O I" bra {i}
+  Stop
+
+# Branch Relative and Set Link
+001100110 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brsl {{t}} {i}
+  Stop
+
+# Branch Absolute and Set Link
+001100010 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brasl {{t}} {i}
+  Stop
+
+# Branch Indirect
+00110101000*DE**** aaaaaaa *******
+  Parsed "O R" bi {{a}}
+  Stop
+
+# Interrupt Return
+00110101010*DE**** aaaaaaa *******
+  Parsed "O R" iret {{a}}
+  Stop
+
+# Branch Indirect and Set Link if External Data
+00110101011*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" bisled {{t}} {{a}}
+  Stop
+
+# Branch Indirect and Set Link
+00110101001*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" bisl {{t}} {{a}}
+  Stop
+
+# Branch If Not Zero Word
+001000010 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brnz {{t}} {i}
+  Stop
+
+# Branch If Zero Word
+001000000 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brz {{t}} {i}
+  Stop
+
+# Branch If Not Zero Halfword
+001000110 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brhnz {{t}} {i}
+  Stop
+
+# Branch If Zero Halfword
+001000100 iiiiiiiiiiiiiiii ttttttt
+  Parsed "O R, I" brhz {{t}} {i}
+  Stop
+
+# Branch Indirect If Zero
+00100101000*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" biz {{t}} {{a}}
+  Stop
+
+# Branch Indirect If Not Zero
+00100101001*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" binz {{t}} {{a}}
+  Stop
+
+# Branch Indirect If Zero Halfword
+00100101010*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" bihz {{t}} {{a}}
+  Stop
+
+# Branch Indirect If Not Zero Halfword
+00100101011*DE**** aaaaaaa ttttttt
+  Parsed "O R, R" bihnz {{t}} {{a}}
+  Stop
+
+####Hint-for-Branch Instructions####
