@@ -48,9 +48,9 @@ ProgramCounterOffset 0
 # [...] is dereference
 # `...` is "address of"
  
-# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the 
+# So to clarify, [`{{n}}`] is the derefenced address of the register indexed by the variable "n". 
 
-variable "n". Got that?
+Got that?
 # Though I don't understand {|{ri}|} for immeds, why the second get variable
  
 # DefaultChanges apply to the inverse condition of anything targeting the target
@@ -60,17 +60,15 @@ variable "n". Got that?
  
 # This will not be a simulator for now
 
-# Update by Disane some of the Integer and Logical Instructions were wrong so i had 
-
-to correct them
+# Update by Disane some of the Integer and Logical Instructions were wrong so i had to correct them
 # missing t -s and the Add Word bit mask was wrong
 # also added all Integer and Logical Instructions
-# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store 
+# i could not confirm if the (d-form) and (a-form) instructions in Memory-Load/Store Instructions 
 
-Instructions are valid
-# Compare Branch and Halt Instructions in the IBM documentation are a little bit 
+are valid
+# Compare Branch and Halt Instructions in the IBM documentation are a little bit weird so i decided 
 
-weird so i decided to update my ISDF documentation
+to update my ISDF documentation
 
 ####DefaultChanges####
  
@@ -794,22 +792,22 @@ DefaultChange 32 `PC` [`PC`]+4
   Stop
 
 # Branch Indirect
-00110101000*DE**** aaaaaaa *******
+00110101000 * D E * * * * aaaaaaa *******
   Parsed "O R" bi {{a}}
   Stop
 
 # Interrupt Return
-00110101010*DE**** aaaaaaa *******
+00110101010 * D E * * * * aaaaaaa *******
   Parsed "O R" iret {{a}}
   Stop
 
 # Branch Indirect and Set Link if External Data
-00110101011*DE**** aaaaaaa ttttttt
+00110101011 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" bisled {{t}} {{a}}
   Stop
 
 # Branch Indirect and Set Link
-00110101001*DE**** aaaaaaa ttttttt
+00110101001 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" bisl {{t}} {{a}}
   Stop
 
@@ -834,23 +832,255 @@ DefaultChange 32 `PC` [`PC`]+4
   Stop
 
 # Branch Indirect If Zero
-00100101000*DE**** aaaaaaa ttttttt
+00100101000 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" biz {{t}} {{a}}
   Stop
 
 # Branch Indirect If Not Zero
-00100101001*DE**** aaaaaaa ttttttt
+00100101001 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" binz {{t}} {{a}}
   Stop
 
 # Branch Indirect If Zero Halfword
-00100101010*DE**** aaaaaaa ttttttt
+00100101010 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" bihz {{t}} {{a}}
   Stop
 
 # Branch Indirect If Not Zero Halfword
-00100101011*DE**** aaaaaaa ttttttt
+00100101011 * D E * * * * aaaaaaa ttttttt
   Parsed "O R, R" bihnz {{t}} {{a}}
   Stop
 
 ####Hint-for-Branch Instructions####
+
+# Hint for Branch (r-form)
+
+# Hint for Branch (a-form)
+
+# Hint for Branch Relative
+
+####Floating-Point Instructions####
+
+# Floating Add
+01011000100 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fa {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Add
+01011001100 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfa {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Subtract
+01011000101 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fs {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Subtract
+01011001101 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfs {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Multiply
+01011000110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fm {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Multiply
+01011001110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfm {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Multiply and Add
+1110 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" fma {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+# Double Floating Multiply and Add
+01101011100 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfma {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Negative Multiply and Subtract
+1101 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" fnms {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+# Double Floating Negative Multiply and Subtract
+01101011110 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfnms {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Multiply and Subtract
+1111 ttttttt bbbbbbb aaaaaaa ccccccc
+  Parsed "O R, R, R, R" fms {{t}} {{a}} {{b}} {{c}}
+  Stop
+
+# Double Floating Multiply and Subtract
+01101011101 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfms {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Negative Multiply and Add
+01101011111 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfnma {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Reciprocal Estimate
+00110111000 ******* aaaaaaa ttttttt
+  Parsed "O R, R" frest {{t}} {{a}}
+  Stop
+
+# Floating Reciprocal Absolute Square Root Estimate
+00110111001 ******* aaaaaaa ttttttt
+  Parsed "O R, R" frsqest {{t}} {{a}}
+  Stop
+
+# Floating Interpolate
+01111010100 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fi {{t}} {{a}} {{b}}
+  Stop
+
+# Convert Signed Integer to Floating
+0111011010 iiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" csflt {{t}} {{a}} {i}
+  Stop
+
+# Convert Floating to Signed Integer
+0111011000 iiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cflts {{t}} {{a}} {i}
+  Stop
+
+# Convert Unsigned Integer to Floating
+0111011011 iiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cuflt {{t}} {{a}} {i}
+  Stop
+
+# Convert Floating to Unsigned Integer
+0111011001 iiiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" cfltu {{t}} {{a}} {i}
+  Stop
+
+# Floating Round Double to Single
+01110111001 ******* aaaaaaa ttttttt
+  Parsed "O R, R" frds {{t}} {{a}}
+  Stop
+
+# Floating Extend Single to Double
+01110111000 ******* aaaaaaa ttttttt
+  Parsed "O R, R" fesd {{t}} {{a}}
+  Stop
+
+# Double Floating Compare Equal
+01111000011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfceq {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Compare Magnitude Equal
+01111001011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfcmeq {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Compare Greater Than
+01011000011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfcgt {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Compare Magnitude Greater Than
+01011001011 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" dfcmgt {{t}} {{a}} {{b}}
+  Stop
+
+# Double Floating Test Special Value
+01110111111 iiiiiii aaaaaaa ttttttt
+  Parsed "O R, R, I" dftsv {{t}} {{a}} {i}
+  Stop
+
+# Floating Compare Equal
+01111000010 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fceq {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Compare Magnitude Equal
+01111001010 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fcmeq {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Compare Greater Than
+01011000010 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fcgt {{t}} {{a}} {{b}}
+  Stop
+
+# Floating Compare Magnitude Greater Than
+01011001010 bbbbbbb aaaaaaa ttttttt
+  Parsed "O R, R, R" fcmgt {{t}} {{a}} {{b}}
+  Stop
+
+# Floating-Point Status and Control Register Write
+01110111010 ******* aaaaaaa ttttttt
+  Parsed "O R" fscrwr {{a}}
+  Stop
+
+# Floating-Point Status and Control Register Read
+01110011000 ******* ******* ttttttt
+  Parsed "O R" fscrrd {{t}}
+  Stop
+
+####Control Instructions####
+
+# Stop and Signal
+00000000000 ******* tttttttttttttt
+  Parsed "O" stop
+  Stop
+
+# Stop and Signal with Dependencies
+00101000000 bbbbbbb aaaaaaa ccccccc
+  Parsed "O" stopd
+  Stop
+
+# No Operation (Load)
+00000000001 ******* ******* *******
+  Parsed "O" lnop
+  Stop
+
+# No Operation (Execute)
+01000000001 ******* ******* ttttttt
+  Parsed "O" nop
+  Stop
+
+# Synchronize
+00000000010 C ********************
+  Parsed "O" sync
+  Stop
+
+# Synchronize Data
+00000000011 ******* ******* *******
+  Parsed "O" dsync
+  Stop
+
+# Move from Special-Purpose Register
+00000001100 ******* aaaaaaa ttttttt
+  Parsed "O R, S" mfspr {{t}} {{a}}
+  Stop
+
+# Move to Special-Purpose Register
+00100001100 ******* aaaaaaa ttttttt
+  Parsed "O S, R" mtspr {{a}} {{t}}
+  Stop
+
+####Channel Instructions####
+
+# Read Channel
+00000001101 ******* aaaaaaa ttttttt
+  Parsed "O R, C" rdch {{t}} {{a}}
+  Stop
+
+# Read Channel Count
+00000001111 ******* aaaaaaa ttttttt
+  Parsed "O R, C" rchcnt {{t}} {{a}}
+  Stop
+
+# Write Channel
+00100001101 ******* aaaaaaa ttttttt
+  Parsed "O C, R" wrch {{a}} {{t}}
+  Stop
